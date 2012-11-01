@@ -1,0 +1,43 @@
+apply plugin: 'java'
+
+/* using maven repository */ 
+repositories {
+	mavenCentral()
+}
+
+/* add junit depependency */
+dependencies {
+	testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+
+/*
+task init << {
+	description = 'Create build and distribution directories'
+	println 'init task'
+}
+
+task compile << {
+	println 'compile task'
+}
+
+task dist << {
+	println 'dist task'
+}
+
+task test << {
+	println 'test task'
+}
+
+task run << {
+	println 'run task'
+}
+
+task clean << {
+	println 'clean task'
+}
+
+dist.dependsOn()
+
+defaultTasks 'clean', 'dist', 'test', 'run' 
+*/
