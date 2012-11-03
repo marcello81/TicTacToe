@@ -1,3 +1,8 @@
+
+/* this plugin adds a lot of java specific task to this project 
+ * (compileJava, processRessources, compileTestJava, testClasses, jar, test, clean, ...) 
+ * http://gradle.org/docs/current/userguide/java_plugin.html
+ */
 apply plugin: 'java'
 
 /* using maven repository */ 
@@ -10,34 +15,20 @@ dependencies {
 	testCompile group: 'junit', name: 'junit', version: '4.+'
 }
 
-
-/*
-task init << {
-	description = 'Create build and distribution directories'
-	println 'init task'
+/* runs the application */
+task(run, type:JavaExec ) {
+	main = 'de.pierry.tictactoe.TicTacToe'
+	classpath = sourceSets.main.runtimeClasspath
 }
 
-task compile << {
-	println 'compile task'
-}
-
-task dist << {
-	println 'dist task'
-}
-
-task test << {
-	println 'test task'
-}
-
-task run << {
-	println 'run task'
-}
-
-task clean << {
-	println 'clean task'
-}
-
-dist.dependsOn()
-
-defaultTasks 'clean', 'dist', 'test', 'run' 
+/* accessing ant task 'sonar' through AntBuilder 
+* TODO: nice try, but its not working :-( 
 */
+task sonar << {
+	ant.taskdef(resource: 'org/sonar/ant/antlib.xml',
+				uri: 'antlib:org.sonar.ant')
+	ant.sonar()
+}
+
+/* running default tasks when starting gradle without task name */
+defaultTasks 'clean', 'build'

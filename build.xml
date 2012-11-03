@@ -18,10 +18,12 @@ Marcel Pierry
 
 	<!-- set global properties -->
 	<property name="src.dir" value="src" />
+	<property name="test.dir" value="src/test/java" />
 	<property name="build.dir" value="build" />
 	<property name="lib.dir" value="lib" />
 	<property name="dist.dir" value="${build.dir}/lib" />
-	<property name="main-class" value="de.pierry.tictactoe.Main" />
+	<property name="reports.dir" value="reports" />
+	<property name="main-class" value="de.pierry.tictactoe.TicTacToe" />
 	
 	<!-- set class path -->
 	<path id="class.path">
@@ -29,33 +31,40 @@ Marcel Pierry
 		<pathelement location="${lib.dir}/junit.jar" />
 	</path>
 
-	<!-- Create build and distribution directories -->
+	<!-- Create build, distribution and test directories -->
 	<target name="init">
 		<tstamp/>
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${reports.dir}" />
 	</target>
 	
 	<!-- Compile the java code from ${src.dir} into ${build.dir} -->
 	<target name="compile" depends="init">
 		<javac classpathref="class.path" includeantruntime="false" srcdir="${src.dir}" destdir="${build.dir}" />
 	</target>
-
+	
 	<!-- Put everything in ${build.dir} into the TicTacToe-TIMESTAMP.jar file -->
-	<target name="dist" depends="compile">		
+	<target name="jar">		
 		<jar destfile="${dist.dir}/${ant.project.name}-${DSTAMP}.jar" basedir="${build.dir}">
 			<manifest>
 				<attribute name="Main-Class" value="${main-class}" />
 			</manifest>
 		</jar>
 	</target>
+
+	<target name="dist" depends="compile,jar" />
 	
 	<!-- run junit tests within the project -->
 	<target name="test">
 		<junit printsummary="yes" fork="yes" haltonfailure="yes">
 			<classpath refid="class.path" />
 			<formatter type="plain"/>
-		  	<test name="de.pierry.tictactoe.BoardTest"/>
+			<batchtest fork="yes" todir="${reports.dir}">
+		  		<fileset dir="${test.dir}">
+		  			
+		  		</fileset>
+			</batchtest>
 		</junit>
 	</target>
 
@@ -67,10 +76,11 @@ Marcel Pierry
 	<!-- clean up - delete build directory -->
 	<target name="clean">
 		<delete dir="${build.dir}" />
+		<delete dir="${reports.dir}" />
 	</target>
 
 	<!-- bringing all together -->
-	<target name="all" depends="clean,dist,test,run" />
+	<target name="all" depends="clean,compile,test,jar" />
 	
 	
 	<!-- SONAR -->
@@ -84,8 +94,8 @@ Marcel Pierry
 	<property name="sonar.projectName" value="Simple TicTacToe Game" />
 	<property name="sonar.projectVersion" value="1.0" />
 	<property name="sonar.language" value="java" />
-	<property name="sonar.sources" value="src\main\java" />
-	<property name="sonar.binaries" value="build\classes\main" />
+	<property name="sonar.sources" value="${src.dir}\main\java" />
+	<property name="sonar.binaries" value="${build.dir}\classes\main" />
 	 
 	<!-- Define the Sonar target -->
 	<target name="sonar">
