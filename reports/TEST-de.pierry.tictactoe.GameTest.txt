@@ -1,0 +1,5 @@
+Testsuite: de.pierry.tictactoe.GameTest
+Tests run: 2, Failures: 0, Errors: 0, Time elapsed: 0,013 sec
+
+Testcase: testSwitchCurrentPlayer took 0,008 sec
+Testcase: testIsValidMove took 0 sec
